@@ -6,39 +6,35 @@
 #include <deque>
 #include <cmath>
 #include <numeric>
+#include <set>
+#include <deque>
 
 int main() {
   int N, K;
   std::cin >> N >> K;
 
-  std::vector<int> P(N);
+  std::vector<int> Q(N);
   for (int i = 0; i < N; ++i) {
-    std::cin >> P[i];
+    int p;
+    std::cin >> p;
+    p -= 1;
+
+    Q[p] = i;
   }
 
-  std::vector<int> sorted_P = P;
-  std::sort(sorted_P.begin(), sorted_P.end());
+  std::set<int> st;
+  for (int i = 0; i < K; ++i) st.insert(Q[i]);
 
-
-  int min = 1000000;
-  for (int i = 0; i <= N-K; ++i) {
-    if (sorted_P[i+K-1] - sorted_P[i] == K-1) {
-
-      int min_idx = K;
-      int max_idx = -1;
-      for (int j = 0; j < K; ++j) {
-        auto itr = std::find(P.begin(), P.end(), sorted_P[i+j]);
-        int idx = std::distance(P.begin(), itr);
-        if (idx < min_idx) min_idx = idx;
-        if (idx > max_idx) max_idx = idx;
-      }
-
-      int tmp = max_idx - min_idx;
-      if (tmp < min) min = tmp;
-      // std::cout << "idx1: " << idx_vector[0] << " idx2: " << idx_vector[K-1] << std::endl;
-    }
+  int ans = *st.rbegin() - *st.begin();
+  for (int i = K; i < N; ++i) {
+    st.erase(Q[i-K]);
+    st.insert(Q[i]);
+    ans = std::min(ans, *st.rbegin() - *st.begin());
   }
 
-  std::cout << min << std::endl;
+  std::cout << ans << std::endl;
+
+
   return 0;
+
 }
