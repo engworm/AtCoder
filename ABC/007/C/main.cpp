@@ -9,6 +9,7 @@
 #include <deque>
 #include <set>
 #include <list>
+#include <stack>
 
 
 const std::array<int, 4> dx {1, 0, -1, 0};
